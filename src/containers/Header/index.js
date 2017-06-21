@@ -19,11 +19,10 @@ class Header extends Component {
   }
 
   render() {
-
     return (
       <div className={styles}>
         <header>
-          <AppBar onLeftIconButtonTouchTap= {this.handleToggle} />
+          <AppBar onLeftIconButtonTouchTap={this.handleToggle} />
         </header>
       </div>
     );
