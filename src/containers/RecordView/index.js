@@ -1,18 +1,24 @@
 import React, { Component }   from 'react';
 import ReactSimpleTimer       from 'react-simple-timer';
+import { connect }            from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter }         from 'react-router-dom';
 
 import Button                 from 'components/Button';
 import MicrophoneIcon         from 'material-ui/svg-icons/av/mic';
 import DeleteIcon             from 'material-ui/svg-icons/action/delete';
 import DoneIcon               from 'material-ui/svg-icons/action/done';
+import Microphone             from 'components/Microphone';
 
 import { styles } from './styles.scss';
+import * as audioActionCreators from 'core/actions/actions-audio';
 
 class RecordView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recording: false
+      recording     : false,
+      saveRecording : false
     }
   }
 
@@ -20,7 +26,9 @@ class RecordView extends Component {
     this.stopRecording();
   }
   saveRecording = () => {
-
+    this.setState({
+      saveRecording: true
+    });
     this.stopRecording();
   }
   stopRecording = () => {
@@ -32,6 +40,13 @@ class RecordView extends Component {
     this.setState({
       recording: true
     })
+  }
+  onStop = (recording) => {
+    const { history } = this.props;
+    if(this.state.saveRecording) {
+      history.push('/recordings');
+      this.props.actions.audio.saveRecording(recording);
+    }
   }
   render() {
     const { recording } = this.state;
@@ -72,6 +87,7 @@ class RecordView extends Component {
 
     return (
       <div className={styles}>
+        <Microphone record={recording} onStop={this.onStop} />
         <div id="controls">
           <span className={recording}>
             <ReactSimpleTimer play={recording} />
@@ -83,4 +99,12 @@ class RecordView extends Component {
   }
 }
 
-export default RecordView;
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      audio: bindActionCreators(audioActionCreators, dispatch)
+    }
+  }
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(RecordView));

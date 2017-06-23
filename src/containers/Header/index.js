@@ -1,6 +1,8 @@
 import React, { Component }   from 'react';
 import { connect }            from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { withRouter }         from 'react-router-dom';
+
 import AppBar                 from 'components/AppBar';
 import Navigation             from 'components/Navigation';
 
@@ -45,4 +47,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

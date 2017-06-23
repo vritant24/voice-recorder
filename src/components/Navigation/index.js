@@ -16,6 +16,9 @@ class Navigation extends Component {
     const { pathname } = this.props.location;
     this.handleChange(pathname, false);
   }
+  componentWillReceiveProps(nextProps) {
+    this.handleChange(nextProps.location.pathname, false);
+  }
   handleChange = (route, updateURL) => {
     this.setState({
       currentRoute: route
